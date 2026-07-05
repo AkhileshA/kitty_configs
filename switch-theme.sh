@@ -19,4 +19,13 @@ if [[ -z "$name" || ! -f "$target" ]]; then
 fi
 
 ln -sf "$name.conf" "$configs_dir/active.conf"
-echo "Switched to '$name'. Reload with ctrl+shift+F5 in kitty, or restart it."
+
+# Point platform.conf at the file for the current OS so the font (and macOS
+# key handling) is right on whichever machine this repo is checked out on.
+case "$(uname -s)" in
+    Darwin) platform=macos ;;
+    *)      platform=linux ;;
+esac
+ln -sf "platform-$platform.conf" "$configs_dir/platform.conf"
+
+echo "Switched to '$name' (platform: $platform). Reload with ctrl+shift+F5 in kitty, or restart it."
